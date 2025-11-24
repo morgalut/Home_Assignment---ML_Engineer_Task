@@ -443,21 +443,26 @@ project/
 
 ---
 
+
+
 ## ⚙️ **Setup Instructions**
 
-### **1. Install Dependencies**
+### **1. Install Dependencies (Local Development Only)**
+
+If you are **not using Docker**, install dependencies manually:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 **Key Packages:**
-- `fastapi` — Web framework
-- `uvicorn` — ASGI server
-- `redis` — Cache layer
-- `openai` — LLM integration
-- `httpx` — Async HTTP client
-- `pytest` — Testing framework
+
+* `fastapi` — Web framework
+* `uvicorn` — ASGI server
+* `redis` — Cache layer
+* `openai` — LLM integration
+* `httpx` — Async HTTP client
+* `pytest` — Testing framework
 
 ---
 
@@ -480,39 +485,60 @@ IPAPI_API_KEY=your_ipapi_key  # Optional (free tier works)
 
 # Cache Configuration
 CACHE_VERSION=v3
-CACHE_TTL_SECONDS=86400  # 24 hours
+CACHE_TTL_SECONDS=86400
 
 # Redis Configuration
-REDIS_HOST=localhost
+REDIS_HOST=redis
 REDIS_PORT=6379
 REDIS_DB=0
 ```
 
+> **Note:** When using Docker, `REDIS_HOST` must match the service name in `docker-compose.yml` (usually `redis`).
+
 ---
 
-### **3. Start Redis**
+### **3. Running the Project with Docker (Recommended)**
+
+Everything—FastAPI + Redis—can be launched using Docker.
+
+#### **Build and Start Services**
 
 ```bash
-# Using Docker
-docker run -d -p 6379:6379 redis:alpine
-
-# Or using local Redis
-redis-server
+docker compose up --build -d
 ```
+
+#### **View Logs**
+
+```bash
+docker compose logs -f
+```
+
+#### **Stop Containers**
+
+```bash
+docker compose down
+```
+
+Server will start at:
+➡️ `http://localhost:8000`
+Interactive Swagger docs:
+➡️ `http://localhost:8000/docs`
 
 ---
 
-### **4. Run FastAPI Server**
+### **4. Running Locally Without Docker**
+
+Start Redis manually or via Docker:
+
+```bash
+docker compose up -d redis
+```
+
+Run the FastAPI server:
 
 ```bash
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
-
-Server will start at: `http://localhost:8000`
-
-Interactive docs: `http://localhost:8000/docs`
-
----
 
 ## 🚀 **Using the API**
 
